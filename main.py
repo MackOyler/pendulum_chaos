@@ -32,5 +32,24 @@ def simulate_simple_pendulum():
     plt.title('Simple Pendulum Simulation')
     plt.show()
     
+# Double Pendulum Simulation
+def double_pendulum(t, y):
+    theta1, omega1, theta2, omega2 = y
+    delta = theta2 - theta1
+
+    denom1 = (2 * m1 + m2 - m2 * np.cos(2 * theta1 - 2 * theta2))
+    denom2 = (L2 / L1) * denom1
+
+    dtheta1_dt = omega1
+    dtheta2_dt = omega2
+
+    domega1_dt = (m2 * g * np.sin(theta2) * np.cos(delta) - m2 * np.sin(delta) * (L2 * omega2 ** 2 + L1 * omega1 ** 2 * np.cos(delta)) - (m1 + m2) * g * np.sin(theta1)) / (L1 * denom1)
+
+    domega2_dt = ((m1 + m2) * (L1 * omega1 ** 2 * np.sin(delta) - g * np.sin(theta2) + g * np.sin(theta1) * np.cos(delta)) + m2 * L2 * omega2 ** 2 * np.sin(delta) * np.cos(delta)) / (L2 * denom2)
+
+    return [dtheta1_dt, domega1_dt, dtheta2_dt, domega2_dt]
+    
     if __name__ == "__main__":
         simulate_simple_pendulum()
+        
+        simulate_double_pendulum()
