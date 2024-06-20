@@ -49,6 +49,33 @@ def double_pendulum(t, y):
 
     return [dtheta1_dt, domega1_dt, dtheta2_dt, domega2_dt]
     
+def simulate_double_pendulum():
+    global m1, m2, L1, L2, sol_double
+    m1 = 1.0  # mass of the first pendulum
+    m2 = 1.0  # mass of the second pendulum
+    L1 = 1.0  # length of the first pendulum
+    L2 = 1.0  # length of the second pendulum
+    theta1_0 = np.pi / 2  # initial angle of the first pendulum
+    theta2_0 = np.pi / 2  # initial angle of the second pendulum
+    omega1_0 = 0.0  # initial angular velocity of the first pendulum
+    omega2_0 = 0.0  # initial angular velocity of the second pendulum
+
+    t_span = (0, 10)
+    t_eval = np.linspace(0, 10, 1000)
+    y0 = [theta1_0, omega1_0, theta2_0, omega2_0]
+
+    sol_double = solve_ivp(double_pendulum, t_span, y0, t_eval=t_eval)
+
+    plt.plot(sol_double.t, sol_double.y[0], label='Theta1 (Angular Displacement of Pendulum 1)')
+    plt.plot(sol_double.t, sol_double.y[1], label='Omega1 (Angular Velocity of Pendulum 1)')
+    plt.plot(sol_double.t, sol_double.y[2], label='Theta2 (Angular Displacement of Pendulum 2)')
+    plt.plot(sol_double.t, sol_double.y[3], label='Omega2 (Angular Velocity of Pendulum 2)')
+    plt.xlabel('Time (s)')
+    plt.ylabel('Value')
+    plt.legend()
+    plt.title('Double Pendulum Simulation')
+    plt.show()
+
     if __name__ == "__main__":
         simulate_simple_pendulum()
         
