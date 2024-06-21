@@ -75,7 +75,29 @@ def simulate_double_pendulum():
     plt.legend()
     plt.title('Double Pendulum Simulation')
     plt.show()
+    
+    animate_double_pendulum(sol_double)
 
+def animate_double_pendulum(sol):
+    def update(frame):
+        theta1 = sol.y[0][frame]
+        theta2 = sol.y[2][frame]
+        x1 = L1 * np.sin(theta1)
+        y1 = -L1 * np.cos(theta1)
+        x2 = x1 + L2 * np.sin(theta2)
+        y2 = y1 - L2 * np.cos(theta2)
+        line.set_data([0, x1, x2], [0, y1, y2])
+        return line,
+
+    fig, ax = plt.subplots()
+    ax.set_xlim(-2, 2)
+    ax.set_ylim(-2, 2)
+    line, = ax.plot([], [], 'o-', lw=2)
+
+    ani = animation.FuncAnimation(fig, update, frames=range(len(sol.t)), blit=True)
+    plt.title('Double Pendulum Animation')
+    plt.show()
+    
     if __name__ == "__main__":
         simulate_simple_pendulum()
         
