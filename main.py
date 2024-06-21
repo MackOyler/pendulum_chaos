@@ -83,6 +83,10 @@ def simulate_double_pendulum():
     animate_double_pendulum(sol_double)
 
 def animate_double_pendulum(sol):
+    global L1, L2
+    L1 = 1.0  # Ensure L1 is defined for the animation function
+    L2 = 1.0  # Ensure L2 is defined for the animation function
+    
     def update(frame):
         theta1 = sol.y[0][frame]
         theta2 = sol.y[2][frame]
@@ -100,7 +104,7 @@ def animate_double_pendulum(sol):
 
     ani = animation.FuncAnimation(fig, update, frames=range(len(sol.t)), blit=True, interval=20)
     plt.title('Double Pendulum Animation')
-    plt.show(block=False)
+    plt.show()
 
 def analyze_phase_space(sol):
     plt.figure()
@@ -121,3 +125,6 @@ if __name__ == "__main__":
 
     print("Analyzing phase space of double pendulum...")
     analyze_phase_space(sol_double)
+
+    # Block until all figures are closed
+    plt.show()
