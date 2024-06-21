@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
 import matplotlib.animation as animation
 
-#constants
+# Constants
 g = 9.81  # acceleration due to gravity, in m/s^2
 
-#single pendulum simulation first
+# Single / Simple Pendulum Simulation
 def simple_pendulum(t, y):
     theta, omega = y
     dydt = [omega, -g / L * np.sin(theta)]
@@ -31,7 +31,7 @@ def simulate_simple_pendulum():
     plt.legend()
     plt.title('Simple Pendulum Simulation')
     plt.show()
-    
+
 # Double Pendulum Simulation
 def double_pendulum(t, y):
     theta1, omega1, theta2, omega2 = y
@@ -43,12 +43,14 @@ def double_pendulum(t, y):
     dtheta1_dt = omega1
     dtheta2_dt = omega2
 
-    domega1_dt = (m2 * g * np.sin(theta2) * np.cos(delta) - m2 * np.sin(delta) * (L2 * omega2 ** 2 + L1 * omega1 ** 2 * np.cos(delta)) - (m1 + m2) * g * np.sin(theta1)) / (L1 * denom1)
+    domega1_dt = (m2 * g * np.sin(theta2) * np.cos(delta) - m2 * np.sin(delta) * (L2 * omega2 ** 2 + L1 * omega1 ** 2 * np.cos(delta)) -
+                  (m1 + m2) * g * np.sin(theta1)) / (L1 * denom1)
 
-    domega2_dt = ((m1 + m2) * (L1 * omega1 ** 2 * np.sin(delta) - g * np.sin(theta2) + g * np.sin(theta1) * np.cos(delta)) + m2 * L2 * omega2 ** 2 * np.sin(delta) * np.cos(delta)) / (L2 * denom2)
+    domega2_dt = ((m1 + m2) * (L1 * omega1 ** 2 * np.sin(delta) - g * np.sin(theta2) + g * np.sin(theta1) * np.cos(delta)) +
+                  m2 * L2 * omega2 ** 2 * np.sin(delta) * np.cos(delta)) / (L2 * denom2)
 
     return [dtheta1_dt, domega1_dt, dtheta2_dt, domega2_dt]
-    
+
 def simulate_double_pendulum():
     global m1, m2, L1, L2, sol_double
     m1 = 1.0  # mass of the first pendulum
@@ -75,7 +77,7 @@ def simulate_double_pendulum():
     plt.legend()
     plt.title('Double Pendulum Simulation')
     plt.show()
-    
+
     animate_double_pendulum(sol_double)
 
 def animate_double_pendulum(sol):
@@ -97,8 +99,22 @@ def animate_double_pendulum(sol):
     ani = animation.FuncAnimation(fig, update, frames=range(len(sol.t)), blit=True)
     plt.title('Double Pendulum Animation')
     plt.show()
+
+def analyze_phase_space(sol):
+    plt.plot(sol.y[0], sol.y[1], label='Pendulum 1 Phase Space')
+    plt.plot(sol.y[2], sol.y[3], label='Pendulum 2 Phase Space')
+    plt.xlabel('Theta (Angular Displacement)')
+    plt.ylabel('Omega (Angular Velocity)')
+    plt.legend()
+    plt.title('Phase Space of Double Pendulum')
+    plt.show()
+
+if __name__ == "__main__":
+    # Simulate and visualize simple pendulum
+    simulate_simple_pendulum()
     
-    if __name__ == "__main__":
-        simulate_simple_pendulum()
-        
-        simulate_double_pendulum()
+    # Simulate and visualize double pendulum
+    simulate_double_pendulum()
+
+    # Analyze phase space of double pendulum
+    analyze_phase_space(sol_double)
