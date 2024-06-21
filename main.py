@@ -18,19 +18,20 @@ def simulate_simple_pendulum():
     theta0 = np.pi / 4  # initial angle (in radians)
     omega0 = 0.0  # initial angular velocity
 
-    t_span = (0, 10)
-    t_eval = np.linspace(0, 10, 1000)
+    t_span = (0, 20)
+    t_eval = np.linspace(0, 20, 1000)
     y0 = [theta0, omega0]
 
     sol = solve_ivp(simple_pendulum, t_span, y0, t_eval=t_eval)
 
+    plt.figure()
     plt.plot(sol.t, sol.y[0], label='Theta (Angular Displacement)')
     plt.plot(sol.t, sol.y[1], label='Omega (Angular Velocity)')
     plt.xlabel('Time (s)')
     plt.ylabel('Value')
     plt.legend()
     plt.title('Simple Pendulum Simulation')
-    plt.show()
+    plt.show(block=False)
 
 # Double Pendulum Simulation
 def double_pendulum(t, y):
@@ -60,14 +61,15 @@ def simulate_double_pendulum():
     theta1_0 = np.pi / 2  # initial angle of the first pendulum
     theta2_0 = np.pi / 2  # initial angle of the second pendulum
     omega1_0 = 0.0  # initial angular velocity of the first pendulum
-    omega2_0 = 0.0  # initial angular velocity of the second pendulum
+    omega2_0 = 0.1  # initial angular velocity of the second pendulum (changed slightly to introduce more chaos)
 
-    t_span = (0, 10)
-    t_eval = np.linspace(0, 10, 1000)
+    t_span = (0, 20)
+    t_eval = np.linspace(0, 20, 1000)
     y0 = [theta1_0, omega1_0, theta2_0, omega2_0]
 
     sol_double = solve_ivp(double_pendulum, t_span, y0, t_eval=t_eval)
 
+    plt.figure()
     plt.plot(sol_double.t, sol_double.y[0], label='Theta1 (Angular Displacement of Pendulum 1)')
     plt.plot(sol_double.t, sol_double.y[1], label='Omega1 (Angular Velocity of Pendulum 1)')
     plt.plot(sol_double.t, sol_double.y[2], label='Theta2 (Angular Displacement of Pendulum 2)')
@@ -76,7 +78,7 @@ def simulate_double_pendulum():
     plt.ylabel('Value')
     plt.legend()
     plt.title('Double Pendulum Simulation')
-    plt.show()
+    plt.show(block=False)
 
     animate_double_pendulum(sol_double)
 
@@ -96,25 +98,26 @@ def animate_double_pendulum(sol):
     ax.set_ylim(-2, 2)
     line, = ax.plot([], [], 'o-', lw=2)
 
-    ani = animation.FuncAnimation(fig, update, frames=range(len(sol.t)), blit=True)
+    ani = animation.FuncAnimation(fig, update, frames=range(len(sol.t)), blit=True, interval=20)
     plt.title('Double Pendulum Animation')
-    plt.show()
+    plt.show(block=False)
 
 def analyze_phase_space(sol):
+    plt.figure()
     plt.plot(sol.y[0], sol.y[1], label='Pendulum 1 Phase Space')
     plt.plot(sol.y[2], sol.y[3], label='Pendulum 2 Phase Space')
     plt.xlabel('Theta (Angular Displacement)')
     plt.ylabel('Omega (Angular Velocity)')
     plt.legend()
     plt.title('Phase Space of Double Pendulum')
-    plt.show()
+    plt.show(block=False)
 
 if __name__ == "__main__":
-    # Simulate and visualize simple pendulum
+    print("Simulating and visualizing simple pendulum...")
     simulate_simple_pendulum()
-    
-    # Simulate and visualize double pendulum
+
+    print("Simulating and visualizing double pendulum...")
     simulate_double_pendulum()
 
-    # Analyze phase space of double pendulum
+    print("Analyzing phase space of double pendulum...")
     analyze_phase_space(sol_double)
